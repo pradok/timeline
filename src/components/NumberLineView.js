@@ -71,7 +71,7 @@ const mapStateToProps = (state) => {
   const tickSpacing = getHeaderTickSpacing(unitsPerPixel);
 
   // Task 1: modify to calculate a correct height
-  const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel, tickSpacing);
+  const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel);
 
   return {
     items,

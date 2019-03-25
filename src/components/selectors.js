@@ -17,12 +17,9 @@ export const valueToPixel = (value, unitsPerPixel) => value / unitsPerPixel;
 // Convert from a pixel location to a number line value
 export const pixelToValue = (pixel, unitsPerPixel) => pixel * unitsPerPixel;
 
-export const getItems = (items, unitsPerPixel, tickSpacing) => {
-  let prevSize = {};
-  let prevLeft;
+export const getItems = (items, unitsPerPixel) => {
+  let prevVerticalSpace = 0;
   let totalHeight = 0;
-  let combinedWidth = 0;
-  let combinedHeight = 0;
   let currentMaxWidth = 0;
   const maxWidth = MAX_ITEM_TEXT_WIDTH + BULLET_WIDTH_INCLUDING_MARGIN;
   const records = items.sortBy(r => r.get('value')).valueSeq().map(e => {
@@ -30,35 +27,19 @@ export const getItems = (items, unitsPerPixel, tickSpacing) => {
     const {width, height} = size;
     let top;
     let left = valueToPixel(e.get('value'), unitsPerPixel);
-    if (prevLeft > 0 && left - prevLeft > 3 * MIN_HEADER_TICK_SPACING) {
-      combinedWidth = 0;
-    }
-    if (combinedWidth > 0) {
-      if (width < currentMaxWidth) {
-        combinedWidth = (combinedWidth - width) + combinedWidth;
-        top = combinedHeight + height;
-        combinedHeight = height <= prevSize.height ? combinedHeight + prevSize.height : combinedHeight + prevSize.height + height;
-      } else {
-        console.log('value:', e.get('value'));
-        combinedWidth = width;
-        combinedHeight = height;
-        top = 0;
-        currentMaxWidth = 0;
-      }
+
+    if (left < currentMaxWidth) {
+      top = prevVerticalSpace;
     } else {
-      combinedWidth = width;
-      combinedHeight = height;
       top = 0;
       currentMaxWidth = 0;
     }
-    totalHeight += height;
-    prevSize = size;
-    combinedHeight += VERTICAL_ITEM_SPACING;
-    prevLeft = left;
-    if (width > currentMaxWidth) {
-      currentMaxWidth = width;
-    }
 
+    totalHeight += height;
+    prevVerticalSpace = prevVerticalSpace + height + (2.5 * VERTICAL_ITEM_SPACING);
+    if (left > currentMaxWidth) {
+      currentMaxWidth = width + left;
+    }
     return immutableRecords.ItemDisplayRecord({
       id: e.get('id'),
       label: e.get('label'),
