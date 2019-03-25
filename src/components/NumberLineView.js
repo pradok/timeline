@@ -1,16 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import NumberLineHeader from "./NumberLineHeader";
 import NumberLineItem from "./NumberLineItem";
-import immutable from "immutable";
+import {List} from "immutable";
 import immutableRecords from "../types/immutableRecords";
 
 import "../styles/base.scss";
 import "./NumberLine.scss";
-import { getHeaderTickSpacing } from "./selectors";
+import {getHeaderTickSpacing, getItems} from "./selectors";
 import actions from "../actions";
-import { MIN_HEADER_TICK_SPACING, VERTICAL_ITEM_SPACING } from "../constants";
+import {MIN_HEADER_TICK_SPACING, VERTICAL_ITEM_SPACING} from "../constants";
 
 const NumberLineView = props => {
 
@@ -20,14 +20,14 @@ const NumberLineView = props => {
   let maximumValue = 0;
   const itemComponents = props.items.map(it => {
     maximumValue = Math.max(maximumValue, it.value);
-    return <NumberLineItem 
-      key={it.id} 
-      id={it.id} 
-      value={it.value} 
-      left={it.left} 
-      width={it.width} 
-      top={it.top} 
-      label={it.label} />;
+    return <NumberLineItem
+      key={it.id}
+      id={it.id}
+      value={it.value}
+      left={it.left}
+      width={it.width}
+      top={it.top}
+      label={it.label}/>;
   });
   maximumValue += props.tickSpacing;
 
@@ -55,9 +55,10 @@ const NumberLineView = props => {
         </select>
       </div>
       <div className="numberLineCanvas">
-        <NumberLineHeader maximum={maximumValue} unitsPerPixel={props.unitsPerPixel} tickSpacing={props.tickSpacing} onChangeScale={props.onChangeScale} />
+        <NumberLineHeader maximum={maximumValue} unitsPerPixel={props.unitsPerPixel} tickSpacing={props.tickSpacing}
+                          onChangeScale={props.onChangeScale}/>
         <div className="numberLineItems" style={itemsStyle}>
-            {itemComponents}
+          {itemComponents}
         </div>
       </div>
     </div>
@@ -66,29 +67,17 @@ const NumberLineView = props => {
 
 const mapStateToProps = (state) => {
   // Task 1: Modify to derive items from redux store ("state" parameter)
-  const items = immutable.List([
-    immutableRecords.ItemDisplayRecord({
-      id: "a",
-      label: "This is an example",
-      value: 5,
-      width: 100,
-      height: 14,
-      left: 40,
-      top: 14
-    })
-  ]);
-
   const unitsPerPixel = state.unitsPerPixel;
   const tickSpacing = getHeaderTickSpacing(unitsPerPixel);
 
   // Task 1: modify to calculate a correct height
-  const height = 40;
+  const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel, tickSpacing);
+
   return {
-      sample: state.items,
-      items,
-      unitsPerPixel,
-      tickSpacing,
-      height
+    items,
+    unitsPerPixel,
+    tickSpacing,
+    height: totalHeight
   };
 };
 
@@ -105,7 +94,6 @@ NumberLineView.propTypes = {
   tickSpacing: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   items: PropTypes.any.isRequired,
-  sample: PropTypes.any.isRequired,
   onChangeScale: PropTypes.func.isRequired
 };
 
