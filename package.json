@@ -31,17 +31,18 @@
   "license": "Commercial",
   "dependencies": {
     "connected-react-router": "4.4.1",
+    "immutable": "latest",
+    "lodash": "4.17.11",
+    "nanoid": "latest",
     "object-assign": "4.1.1",
+    "re-reselect": "latest",
     "react": "16.4.2",
     "react-dom": "16.4.2",
     "react-redux": "5.0.7",
     "react-router-dom": "4.3.1",
     "redux": "4.0.0",
     "redux-thunk": "2.3.0",
-    "nanoid": "latest",
-    "immutable": "latest",
     "reselect": "latest",
-    "re-reselect": "latest",
     "reselect-map": "latest"
   },
   "devDependencies": {

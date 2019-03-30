@@ -26,7 +26,7 @@ const calcWordWidth = (word) => {
 // Calculates the width and height of a paragraph of text,
 // including any word wrapping required to fit inside maxWidth.
 // You should not need to modify this function.
-const calcTextSize = (text, maxWidth) => {
+const calcTextSize = _.memoize((text, maxWidth) => {
   const spaceWidth = UbuntuCharWidthMap[" "];
 
   if (!text) {
@@ -86,6 +86,6 @@ const calcTextSize = (text, maxWidth) => {
       width: maxLineWidth,
       height: lineCount * lineHeight
   };
-};
+});
   
 export default calcTextSize;

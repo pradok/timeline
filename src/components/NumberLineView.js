@@ -3,22 +3,20 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import NumberLineHeader from "./NumberLineHeader";
 import NumberLineItem from "./NumberLineItem";
-import {List} from "immutable";
-import immutableRecords from "../types/immutableRecords";
 
 import "../styles/base.scss";
 import "./NumberLine.scss";
-import {getHeaderTickSpacing, getItems} from "./selectors";
+import {getHeaderTickSpacing, getItemsSelector, getHeaderTickSpacingSelector} from "./selectors";
 import actions from "../actions";
 import {MIN_HEADER_TICK_SPACING, VERTICAL_ITEM_SPACING} from "../constants";
 
 const NumberLineView = props => {
-
+  const {items: {items, totalHeight}} = props;
   // Convert the passed in props.items into NumberLineItem
   // and also calculate the maximumValue so we know how far
   // to render the header.
   let maximumValue = 0;
-  const itemComponents = props.items.map(it => {
+  const itemComponents = items.map(it => {
     maximumValue = Math.max(maximumValue, it.value);
     return <NumberLineItem
       key={it.id}
@@ -36,7 +34,7 @@ const NumberLineView = props => {
 
   // Manually set the height of the items canvas
   const itemsStyle = {
-    height: `${props.height + VERTICAL_ITEM_SPACING}px`
+    height: `${totalHeight + VERTICAL_ITEM_SPACING}px`
   };
 
   // Render the view, including:
@@ -68,16 +66,16 @@ const NumberLineView = props => {
 const mapStateToProps = (state) => {
   // Task 1: Modify to derive items from redux store ("state" parameter)
   const unitsPerPixel = state.unitsPerPixel;
-  const tickSpacing = getHeaderTickSpacing(unitsPerPixel);
 
   // Task 1: modify to calculate a correct height
-  const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel);
-
+  // const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel);
+ // const {items, totalHeight} = getItemsSelector(state);
+  // hashSelector(state);
   return {
-    items,
+    items: getItemsSelector(state),
     unitsPerPixel,
-    tickSpacing,
-    height: totalHeight
+    tickSpacing: getHeaderTickSpacingSelector(state),
+    height: 0
   };
 };
 
