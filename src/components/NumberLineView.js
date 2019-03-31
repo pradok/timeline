@@ -6,7 +6,7 @@ import NumberLineItem from "./NumberLineItem";
 
 import "../styles/base.scss";
 import "./NumberLine.scss";
-import {getHeaderTickSpacing, getItemsSelector, getHeaderTickSpacingSelector} from "./selectors";
+import {getItemsSelector, getHeaderTickSpacingSelector} from "./selectors";
 import actions from "../actions";
 import {MIN_HEADER_TICK_SPACING, VERTICAL_ITEM_SPACING} from "../constants";
 
@@ -19,6 +19,7 @@ const NumberLineView = props => {
   const itemComponents = items.map(it => {
     maximumValue = Math.max(maximumValue, it.value);
     return <NumberLineItem
+      onClickHandler={props.onDeleteItem}
       key={it.id}
       id={it.id}
       value={it.value}
@@ -68,9 +69,6 @@ const mapStateToProps = (state) => {
   const unitsPerPixel = state.unitsPerPixel;
 
   // Task 1: modify to calculate a correct height
-  // const {items, totalHeight} = getItems(state.get('items'), unitsPerPixel);
- // const {items, totalHeight} = getItemsSelector(state);
-  // hashSelector(state);
   return {
     items: getItemsSelector(state),
     unitsPerPixel,
@@ -83,8 +81,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onChangeScale: scale => {
       dispatch(actions.changeScale(scale));
-    }
-  };
+    },
+    onDeleteItem: id =>  dispatch(actions.deleteItem(id))
+};
 };
 
 NumberLineView.propTypes = {
@@ -92,7 +91,8 @@ NumberLineView.propTypes = {
   tickSpacing: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   items: PropTypes.any.isRequired,
-  onChangeScale: PropTypes.func.isRequired
+  onChangeScale: PropTypes.func.isRequired,
+  onDeleteItem: PropTypes.func.isRequired
 };
 
 export default connect(

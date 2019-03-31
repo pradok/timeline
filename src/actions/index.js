@@ -4,12 +4,14 @@ import uniqueId from "../utils/uniqueId";
 // but are provided as examples.
 
 const CREATE_ITEM = "object:CREATE_ITEM";
+const DELETE_ITEM = "object:DELETE_ITEM";
 const EDIT_LABEL = "object:EDIT_LABEL";
 const EDIT_POSITION = "object:EDIT_POSITION";
 const CHANGE_SCALE = "numberLine:CHANGE_SCALE";
 
 export const actionTypes = {
     CREATE_ITEM,
+    DELETE_ITEM,
     EDIT_LABEL,
     EDIT_POSITION,
     CHANGE_SCALE
@@ -21,6 +23,14 @@ const createItem = (label, position) => {
     id: uniqueId(),
     label,
     position
+  };
+};
+
+const deleteItem = (id) => {
+  console.log('id:', id);
+  return {
+    type: DELETE_ITEM,
+    id
   };
 };
 
@@ -49,6 +59,7 @@ const editPosition = (id, position) => {
   
 export default {
   createItem,
+  deleteItem,
   editLabel,
   editPosition,
   changeScale

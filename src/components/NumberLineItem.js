@@ -12,8 +12,12 @@ const NumberLineItem = props => {
     width: props.width
   };
 
+  const onClickHandler = () => {
+    props.onClickHandler(props.id);
+  }
+
   return (
-    <div className="numberLineItem" style={style}>
+    <div className="numberLineItem" style={style} onClick={onClickHandler}>
       <div className="numberLineItemBullet" />
         <span>{props.label}</span>
     </div>
@@ -26,7 +30,8 @@ NumberLineItem.propTypes = {
   left: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   top: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
+  onClickHandler: PropTypes.func.isRequired
 };
 
 export default NumberLineItem;

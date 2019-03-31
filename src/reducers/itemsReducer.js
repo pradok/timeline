@@ -29,6 +29,8 @@ const reducer = (state = Map(), action) => {
             action.position
           )
         );
+      case actionTypes.DELETE_ITEM:
+        return state.delete(action.id);
       case actionTypes.EDIT_LABEL: {
         return state.setIn([action.id, "label"], action.label);
       }
