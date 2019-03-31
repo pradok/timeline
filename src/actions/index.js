@@ -27,7 +27,6 @@ const createItem = (label, position) => {
 };
 
 const deleteItem = (id) => {
-  console.log('id:', id);
   return {
     type: DELETE_ITEM,
     id
